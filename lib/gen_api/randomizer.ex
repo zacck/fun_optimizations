@@ -33,8 +33,11 @@ defmodule GenApi.Randomizer do
 
     new_state = %{state | timestamp: now }
 
+    # fetch users with more than min_number points
+    users = User.max_two_users_over(state.min_number)
+
     # query db and return results
-    results = []
+    results = %{users: users, timestamp: state.timestamp}
 
     {:reply, results, new_state}
   end
@@ -44,11 +47,10 @@ defmodule GenApi.Randomizer do
     schedule_update()
 
     # spawn off an asnyc process to update user points
-    spawn(fn -> GenApi.User.update_user_points() end)
+    spawn(fn -> User.update_user_points() end)
 
     #update random number in state
     new_state = %{state | min_number: :rand.uniform(100)}
-    IO.inspect(new_state)
 
     {:noreply, new_state}
   end

@@ -1,7 +1,8 @@
 defmodule GenApi.User do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.Query
   alias GenApi.Repo
+  alias GenApi.User
 
   schema "users" do
     field :points, :integer
@@ -24,6 +25,17 @@ defmodule GenApi.User do
       {:ok, _} -> :ok
       # lets log out the failure so someone can handle it
       _ -> IO.puts("Update user points failed at #{NaiveDateTime.utc_now()}")
-    end 
+    end
+  end
+
+  # let's fetch at max two users with more than a specified number of points
+  def max_two_users_over(more_than) do
+    query =
+      from u in User,
+      where: u.points > ^more_than,
+      order_by: fragment("RANDOM()"),
+      limit: 2
+
+    Repo.all(query)
   end
 end
