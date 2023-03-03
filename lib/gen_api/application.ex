@@ -15,9 +15,9 @@ defmodule GenApi.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: GenApi.PubSub},
       # Start the Endpoint (http/https)
-      GenApiWeb.Endpoint
-      # Start a worker by calling: GenApi.Worker.start_link(arg)
-      # {GenApi.Worker, arg}
+      GenApiWeb.Endpoint,
+      # Start the randomizer worker by
+      {GenApi.Randomizer, %{}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
