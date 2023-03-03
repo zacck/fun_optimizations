@@ -21,6 +21,23 @@ defmodule GenApi.Randomizer do
     {:ok, state}
   end
 
+  # implement sychronous callback to query the database
+  def handle_call(:query, _, state) do
+
+    #update the state of the server with a new timestamp
+    now =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.truncate(:second)
+      |> NaiveDateTime.to_string()
+
+    new_state = %{state | timestamp: now }
+
+    # query db and return results
+    results = []
+
+    {:reply, results, new_state}
+  end
+
   def handle_info(:update, state) do
     #schedule the next update
     schedule_update()
