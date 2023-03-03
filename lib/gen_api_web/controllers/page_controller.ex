@@ -1,7 +1,9 @@
 defmodule GenApiWeb.PageController do
   use GenApiWeb, :controller
 
+
   def index(conn, _params) do
-    render(conn, "index.html")
+    results = GenServer.call(:randomizer, :query)
+    json(conn, results)
   end
 end

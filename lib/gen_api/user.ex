@@ -4,6 +4,8 @@ defmodule GenApi.User do
   alias GenApi.Repo
   alias GenApi.User
 
+  # Add an encoder for our user structs so we can show them in JSON
+  @derive {Jason.Encoder, only: [:id, :points]}
   schema "users" do
     field :points, :integer
     timestamps()
