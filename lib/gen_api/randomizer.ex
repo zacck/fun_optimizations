@@ -1,5 +1,6 @@
 defmodule GenApi.Randomizer do
   use GenServer
+  alias GenApi.User
 
   # opportunity to pass in persistent state
   # e.g like the last timestamp in case the app restarted
@@ -41,6 +42,9 @@ defmodule GenApi.Randomizer do
   def handle_info(:update, state) do
     #schedule the next update
     schedule_update()
+
+    # spawn off an asnyc process to update user points
+    spawn(fn -> GenApi.User.update_user_points() end)
 
     #update random number in state
     new_state = %{state | min_number: :rand.uniform(100)}
